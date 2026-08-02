@@ -1,0 +1,63 @@
+Oracle Native Network Encryption (NNE) encrypts data in transit (in-flight) between the Oracle client and the Oracle database server.
+
+✅ Encrypts SQL queries, results, usernames, passwords, and other network traffic.
+✅ Works without requiring SSL/TLS certificates.
+✅ Uses Oracle Net encryption configured in sqlnet.ora on the client and server.
+✅ Supports encryption algorithms such as AES (AES128, AES192, AES256) depending on the Oracle version.
+
+
+However:
+
+NNE is not SSL/TLS. It is Oracle's own encryption mechanism built into Oracle Net.
+SSL/TLS uses X.509 certificates to provide encryption and server/client identity verification.
+NNE provides encryption (and optionally checksumming for integrity), but it does not provide the same certificate-based authentication model that TLS offers.
+
+
+A simple comparison:
+
+Oracle Native Network Encryption	SSL/TLS
+Encrypts data in transit	Encrypts data in transit
+No certificates required	Certificates required
+Uses Oracle Net encryption	Uses standard TLS protocol
+Easier to configure	More configuration (wallets/certificates)
+
+
+So your statement can be refined to:
+
+Oracle Native Network Encryption encrypts the in-flight data exchanged between the Oracle client and the database server without requiring SSL/TLS certificates. It uses Oracle's native network encryption instead of the TLS protocol.
+
+
+3-Tier Java Application
+Tomcat (Application Server)
+AWS RDS Oracle 19c
+Oracle JDBC Thin Driver
+Goal: Enable Oracle Native Network Encryption (NNE) (without SSL certificates)
+
+Before:
+Browser
+   │
+   ▼
+Apache/Tomcat
+(Java Application)
+   │
+   │ JDBC Thin
+   ▼
+AWS RDS Oracle 19c
+
+
+After:
+Browser
+   │
+   ▼
+Tomcat
+   │
+   │ JDBC Thin
+   │
+=============================
+🔒 Oracle Native Network Encryption
+=============================
+   │
+AWS RDS Oracle
+
+
+
