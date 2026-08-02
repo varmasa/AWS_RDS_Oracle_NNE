@@ -1,0 +1,22 @@
+From an application → Oracle Database perspective, the flow looks like this:
+
+Without Oracle Native Network Encryption (NNE):
+
+Application sends a SQL query to the Oracle Database.
+The query travels over the network in plain text.
+Oracle Database processes the query.
+Database sends the results back.
+The results also travel in plain text.
+Anyone who intercepts the network traffic could potentially read the data.
+
+With Oracle Native Network Encryption (NNE):
+
+Application sends a SQL query.
+Oracle Client (JDBC/OCI/SQL*Plus, etc.) encrypts the query.
+The encrypted data travels over the network.
+Oracle Database decrypts the query.
+Database executes the query.
+Oracle Database encrypts the query results.
+The encrypted results travel back over the network.
+Oracle Client decrypts the results.
+The application receives the original data.
