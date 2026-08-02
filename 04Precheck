@@ -1,0 +1,97 @@
+SQL> SELECT NETWORK_SERVICE_BANNER
+  2  FROM V$SESSION_CONNECT_INFO
+  3* WHERE SID = SYS_CONTEXT('USERENV', 'SID');
+
+NETWORK_SERVICE_BANNER                                                    
+_________________________________________________________________________ 
+TCP/IP NT Protocol Adapter for Linux: Version 19.0.0.0.0 - Production     
+Encryption service for Linux: Version 19.0.1.0.0 - Production             
+Crypto-checksumming service for Linux: Version 19.0.1.0.0 - Production
+
+
+means:
+
+✅ The Oracle client/server software has the Oracle Advanced Security encryption module available.
+✅ The session can support encryption/checksumming.
+❌ It does not prove that this connection is encrypted.
+
+Think of it like this:
+  Oracle Engine
+     |
+     |-- Encryption feature installed  ✅
+     |
+     |-- Encryption negotiated for this session ❓
+
+
+The Option Group in AWS RDS Oracle is needed because AWS manages the database infrastructure. In a self-managed Oracle server, you would configure sqlnet.ora directly:
+
+    SQLNET.ENCRYPTION_SERVER = REQUIRED
+    SQLNET.ENCRYPTION_TYPES_SERVER = (AES256)
+
+In RDS:
+
+    You cannot edit sqlnet.ora on the DB server
+             |
+             ↓
+    AWS provides Option Group
+             |
+             ↓
+    NATIVE_NETWORK_ENCRYPTION option
+             |
+             ↓
+    RDS applies the Oracle Net encryption configuration
+
+
+Without Option Group:
+
+Your current situation may look like:
+
+Tomcat JDBC Client
+       |
+       | "I support encryption"
+       |
+       ↓
+RDS Oracle
+       |
+       | "Encryption is optional/not configured"
+       |
+       ↓
+Connection established without encryption
+
+The banner still shows:
+
+Encryption service available
+
+because the Oracle software supports it.
+
+
+With Option Group + NNE configured:
+
+Example:
+
+RDS Option Group
+
+SQLNET.ENCRYPTION_SERVER = REQUIRED
+SQLNET.ENCRYPTION_TYPES_SERVER = AES256
+
+Then connection negotiation becomes:
+
+Tomcat JDBC Client
+       |
+       | Request encryption
+       |
+       ↓
+RDS Oracle
+       |
+       | Require AES256
+       |
+       ↓
+Encrypted session established
+
+Now the banner changes to something like:
+
+Oracle Advanced Security:
+Encryption service for AES256
+
+Oracle Advanced Security:
+Crypto-checksumming service for SHA256
