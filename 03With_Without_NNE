@@ -20,3 +20,30 @@ Oracle Database encrypts the query results.
 The encrypted results travel back over the network.
 Oracle Client decrypts the results.
 The application receives the original data.
+
+
+Application
+     │
+     │ Plain data
+     ▼
+Oracle Client
+     │
+     │ 🔒 Encrypted (NNE)
+=========================== Network ===========================
+     │
+     ▼
+Oracle Database
+     │
+     │ Execute SQL
+     ▼
+Oracle Database
+     │
+     │ 🔒 Encrypted results
+=========================== Network ===========================
+     │
+     ▼
+Oracle Client
+     │
+     │ Plain data
+     ▼
+Application
