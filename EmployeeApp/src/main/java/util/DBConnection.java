@@ -3,12 +3,12 @@ package util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DBConnection {
 
-    // Update with your RDS details
     private static final String URL =
-            "jdbc:oracle:thin:@//database-1.c1cqwa8isnnr.ap-south-1.rds.amazonaws.com:1521/DATABASE";
+        "jdbc:oracle:thin:@//database-1.c1cqwa8isnnr.ap-south-1.rds.amazonaws.com:1521/DATABASE";
 
     private static final String USER = "admin";
     private static final String PASSWORD = "varma123";
@@ -16,22 +16,29 @@ public class DBConnection {
     public static Connection getConnection() {
 
         try {
-            // Load Oracle JDBC Driver
             Class.forName("oracle.jdbc.OracleDriver");
 
-            System.out.println("Connecting to Oracle RDS...");
+            Properties props = new Properties();
+            props.setProperty("user", USER);
+            props.setProperty("password", PASSWORD);
 
-            Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
+            // Native Network Encryption
+            props.setProperty("oracle.net.encryption_client", "REQUIRED");
+            props.setProperty("oracle.net.encryption_types_client", "(AES256)");
 
-            System.out.println("Oracle Database Connected Successfully!");
+            props.setProperty("oracle.net.crypto_checksum_client", "REQUIRED");
+            props.setProperty("oracle.net.crypto_checksum_types_client", "(SHA512)");
+
+            // Enable JDBC Oracle Net tracing
+            props.setProperty("oracle.net.trace_level", "ADMIN");
+            props.setProperty("oracle.net.trace_directory", "/tmp");
+            props.setProperty("oracle.net.trace_file", "jdbc_nne.trc");
+
+            Connection con = DriverManager.getConnection(URL, props);
 
             return con;
 
-        } catch (ClassNotFoundException e) {
-            System.out.println("Oracle JDBC Driver not found!");
-            e.printStackTrace();
-        } catch (SQLException e) {
-            System.out.println("Database Connection Failed!");
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
