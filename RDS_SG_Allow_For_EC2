@@ -1,0 +1,57 @@
+EC2 sending Req for RDS oracle Its getting timeout?
+
+Both should be in same VPC
+In RDS Oracle SG's Inbound we have to allow the EC2 SG
+
+
+         EC2
+     SG: sg-0dc6447cf87548453
+            |
+            |  TCP 1521
+            v
+          RDS
+     SG: sg-0ea74fef88f07cc7d
+
+Inbound Rule on RDS SG:
+Port: 1521
+Source: sg-0dc6447cf87548453
+
+
+In your RDS Security Group inbound rule:
+
+Type: Oracle-RDS
+Port: 1521
+Source: EC2 Security Group (sg-0dc6447cf87548453) ✅
+
+This means:
+
+"Allow Oracle connections only from EC2 instances that belong to this Security Group."
+
+Why use the EC2 Security Group instead of an IP?
+
+Suppose:
+
+EC2 private IP = 172.31.47.121
+RDS private IP = 172.31.42.245
+
+You could allow:
+
+Source = 172.31.47.121/32
+
+It would work.
+
+But if tomorrow you:
+
+Stop and recreate the EC2 instance,
+Launch a new EC2,
+Use an Auto Scaling Group,
+
+the EC2 may get a different private IP. Then you'd have to update the RDS Security Group every time.
+
+Instead, by using the EC2 Security Group as the source, AWS checks:
+
+"Is the incoming connection coming from an EC2 instance that has Security Group sg-0dc6447cf87548453 attached?"
+
+If yes → allow it.
+
+This continues to work even if the EC2's private IP changes.
