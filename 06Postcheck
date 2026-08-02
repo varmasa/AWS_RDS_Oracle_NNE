@@ -1,0 +1,45 @@
+SQL> SELECT
+  2      NETWORK_SERVICE_BANNER
+  3  FROM
+  4      V$SESSION_CONNECT_INFO
+  5  WHERE
+  6*     SID = SYS_CONTEXT('USERENV','SID');
+
+NETWORK_SERVICE_BANNER                                                                   
+________________________________________________________________________________________ 
+TCP/IP NT Protocol Adapter for Linux: Version 19.0.0.0.0 - Production                    
+Encryption service for Linux: Version 19.0.1.0.0 - Production                            
+AES256 Encryption service adapter for Linux: Version 19.0.1.0.0 - Production             
+Crypto-checksumming service for Linux: Version 19.0.1.0.0 - Production                   
+SHA512 Crypto-checksumming service adapter for Linux: Version 19.0.1.0.0 - Production    
+
+SQL> SELECT NETWORK_SERVICE_BANNER
+  2* FROM V$SESSION_CONNECT_INFO;
+
+NETWORK_SERVICE_BANNER                                                                   
+________________________________________________________________________________________ 
+TCP/IP NT Protocol Adapter for Linux: Version 19.0.0.0.0 - Production                    
+Encryption service for Linux: Version 19.0.1.0.0 - Production                            
+Crypto-checksumming service for Linux: Version 19.0.1.0.0 - Production                   
+Oracle Bequeath NT Protocol Adapter for Linux: Version 19.0.0.0.0 - Production           
+Authentication service for Linux: Version 19.0.1.0.0 - Production                        
+Encryption service for Linux: Version 19.0.1.0.0 - Production                            
+RC4_256 Encryption service adapter for Linux: Version 19.0.1.0.0 - Production            
+Crypto-checksumming service for Linux: Version 19.0.1.0.0 - Production                   
+SHA512 Crypto-checksumming service adapter for Linux: Version 19.0.1.0.0 - Production    
+TCP/IP NT Protocol Adapter for Linux: Version 19.0.0.0.0 - Production                    
+Encryption service for Linux: Version 19.0.1.0.0 - Production                            
+Crypto-checksumming service for Linux: Version 19.0.1.0.0 - Production                   
+TCP/IP NT Protocol Adapter for Linux: Version 19.0.0.0.0 - Production                    
+Encryption service for Linux: Version 19.0.1.0.0 - Production                            
+AES256 Encryption service adapter for Linux: Version 19.0.1.0.0 - Production             
+Crypto-checksumming service for Linux: Version 19.0.1.0.0 - Production                   
+SHA512 Crypto-checksumming service adapter for Linux: Version 19.0.1.0.0 - Production    
+Oracle Bequeath NT Protocol Adapter for Linux: Version 19.0.0.0.0 - Production           
+Authentication service for Linux: Version 19.0.1.0.0 - Production                        
+Encryption service for Linux: Version 19.0.1.0.0 - Production                            
+RC4_256 Encryption service adapter for Linux: Version 19.0.1.0.0 - Production            
+Crypto-checksumming service for Linux: Version 19.0.1.0.0 - Production                   
+SHA512 Crypto-checksumming service adapter for Linux: Version 19.0.1.0.0 - Production    
+
+23 rows selected. 
